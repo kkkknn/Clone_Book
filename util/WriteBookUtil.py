@@ -1,13 +1,17 @@
+#!/usr/bin/python3
 # 使用前首先要引入os模块，一个程序文件引入一次就可以了，下面默认都已引入os模块
 import os
+import re
+import requests
 
-dir_path = "Books/"
+dir_path = "Books"
 
 
 # 写入图书详情工具类
 class WriteUtil(object):
     @staticmethod
     def write_info(img_url, book_name, source_name, author_name, near_chapter_name):
+        global pic
         if book_name is None or book_name == "":
             return "图书名字为空"
         elif source_name is None or source_name == "":
@@ -26,13 +30,53 @@ class WriteUtil(object):
                 print("创建相关文件或文件夹")
             # 创建并写入图书详情文件
             file = open(path + "/info.json", 'w')
-            file.writelines("book_name:"+book_name)
-            file.writelines("author_name:"+author_name)
-            file.writelines("source_name:"+source_name)
+            file.writelines("book_name:"+book_name+",")
+            file.writelines("author_name:"+author_name+",")
+            file.writelines("source_name:"+source_name+",")
             file.writelines("near_chapter_name:"+near_chapter_name)
             file.close()
+            if not os.path.exists(path):
+                try:
+                    pic = requests.get(img_url)
+                except requests.exceptions.ConnectionError:
+                    print('图片无法下载')
+                # 保存图片路径
+                fp = open(path + "/book_info.jpg", 'wb')
+                fp.write(pic.content)
+                fp.close()
+                print('图片下载 保存完成')
+
             return '写入图书详情成功'
 
+    @staticmethod
+    def write_chapter(path, chapter_name, content_list):
+        save_path = dir_path+"/"+path
+        if chapter_name == "" or len(content_list) == 0:
+            return "章节名字/内容为空"
+        elif os.path.exists(save_path):
+            chapter_name = re.sub("[<>/\\\|:\"*?]", "-", chapter_name)
+            file_name = save_path + "/"+chapter_name+".txt"
+            file = open(file_name, 'w', encoding="utf-8")
+            for index in range(len(content_list)):
+                file.writelines(content_list[index])
+                file.writelines("\n")
+            file.close()
+            return "写入成功"
+        else:
+            return "保存路径不正确 :" + save_path
+
+    @staticmethod
+    def get_chapter_sum(path):
+        chapter_path = dir_path+"/"+path
+        folder = os.path.exists(chapter_path)
+        if not folder:
+            print("未找到相关文件或文件夹")
+            os.makedirs(chapter_path)
+            print("创建相关文件或文件夹")
+            return 0
+        else:
+            file_list = os.listdir(chapter_path)
+            return len(file_list)
 
 
 
