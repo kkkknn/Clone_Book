@@ -1,7 +1,7 @@
 # 使用前首先要引入os模块，一个程序文件引入一次就可以了，下面默认都已引入os模块
 import os
 
-dir_path = "f://Books/"
+dir_path = "Books/"
 
 
 # 写入图书详情工具类
