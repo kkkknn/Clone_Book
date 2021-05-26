@@ -4,7 +4,7 @@ import os
 import re
 import requests
 
-dir_path = "Books"
+dir_path = "/home/book_save_dir"
 
 
 # 写入图书详情工具类
@@ -35,7 +35,7 @@ class WriteUtil(object):
             file.writelines("source_name:"+source_name+",")
             file.writelines("near_chapter_name:"+near_chapter_name)
             file.close()
-            if not os.path.exists(path):
+            if os.path.exists(path):
                 try:
                     pic = requests.get(img_url)
                 except requests.exceptions.ConnectionError:
