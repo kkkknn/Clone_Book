@@ -29,11 +29,9 @@ class WriteUtil(object):
                 os.makedirs(path)
                 print("创建相关文件或文件夹")
             # 创建并写入图书详情文件
-            file = open(path + "/info.json", 'w')
-            file.writelines("book_name:"+book_name+",")
-            file.writelines("author_name:"+author_name+",")
-            file.writelines("source_name:"+source_name+",")
-            file.writelines("near_chapter_name:"+near_chapter_name)
+            file = open(path + "/info.json", 'w', encoding="utf-8")
+            str = "book_name:"+book_name+","+"author_name:"+author_name+","+"source_name:"+source_name+","+"near_chapter_name:"+near_chapter_name
+            file.writelines(str)
             file.close()
             if os.path.exists(path):
                 try:
@@ -61,7 +59,7 @@ class WriteUtil(object):
                 file.writelines(content_list[index])
                 file.writelines("\n")
             file.close()
-            return "写入成功"
+            return chapter_name+"    写入成功"
         else:
             return "保存路径不正确 :" + save_path
 
