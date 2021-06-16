@@ -33,8 +33,11 @@ class Source(CloneUtil):
         # 图书封面图片
         content = html.xpath('//*[@id="fmimg"]/img/@src')
         img_url = content[0]
+        # 图书简介
+        content = html.xpath('//*[@id="intro"]/p/text()')
+        book_about = content[0]
 
-        value = WriteUtil.write_info(img_url, book_name, source_name, author_name, near_chapter_name)
+        value = WriteUtil.write_info(img_url, book_name, source_name, author_name, near_chapter_name, book_about)
         print(value)
 
         # 获取章节列表

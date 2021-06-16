@@ -10,7 +10,7 @@ dir_path = "/home/book_save_dir"
 # 写入图书详情工具类
 class WriteUtil(object):
     @staticmethod
-    def write_info(img_url, book_name, source_name, author_name, near_chapter_name):
+    def write_info(img_url, book_name, source_name, author_name, near_chapter_name, book_about):
         global pic
         if book_name is None or book_name == "":
             return "图书名字为空"
@@ -30,7 +30,7 @@ class WriteUtil(object):
                 print("创建相关文件或文件夹")
             # 创建并写入图书详情文件
             file = open(path + "/info.json", 'w', encoding="utf-8")
-            str = "book_name:"+book_name+","+"author_name:"+author_name+","+"source_name:"+source_name+","+"near_chapter_name:"+near_chapter_name
+            str = "book_name:"+book_name+","+"author_name:"+author_name+","+"source_name:"+source_name+","+"near_chapter_name:"+near_chapter_name+","+"book_about:"+book_about
             file.writelines(str)
             file.close()
             if os.path.exists(path):
@@ -75,6 +75,3 @@ class WriteUtil(object):
         else:
             file_list = os.listdir(chapter_path)
             return len(file_list)
-
-
-
