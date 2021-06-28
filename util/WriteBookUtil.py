@@ -30,7 +30,7 @@ class WriteUtil(object):
                 print("创建相关文件或文件夹")
             # 创建并写入图书详情文件
             file = open(path + "/info.json", 'w', encoding="utf-8")
-            str = "book_name:"+book_name+","+"author_name:"+author_name+","+"source_name:"+source_name+","+"near_chapter_name:"+near_chapter_name+","+"book_about:"+book_about
+            str = '{"book_name":"'+book_name+'","author_name":"'+author_name+'","source_name":"'+source_name+'","near_chapter_name":"'+near_chapter_name+'","book_about":"'+book_about+'"}'
             file.writelines(str)
             file.close()
             if os.path.exists(path):
