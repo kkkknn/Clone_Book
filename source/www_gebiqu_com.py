@@ -61,6 +61,6 @@ class Source(CloneUtil):
                 content_str_list = chapter_html.xpath('//div[@id="content"]/text()')
                 for content_str in content_str_list:
                     content_str.replace(u'\x20', u'\n').replace(u'\u3000', ' ')
-                str2 = WriteUtil.write_chapter(root_path, chapter_list[index][0], content_str_list)
+                str2 = WriteUtil.write_chapter(root_path, chapter_list[index][0],index, content_str_list)
                 print(str2)
 

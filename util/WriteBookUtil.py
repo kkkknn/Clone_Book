@@ -47,12 +47,16 @@ class WriteUtil(object):
             return '写入图书详情成功'
 
     @staticmethod
-    def write_chapter(path, chapter_name, content_list):
+    def write_chapter(path, chapter_name, index, content_list):
         save_path = dir_path+"/"+path
         if chapter_name == "" or len(content_list) == 0:
             return "章节名字/内容为空"
         elif os.path.exists(save_path):
+            # 替换特殊字符防止写入失败
             chapter_name = re.sub("[<>/\\\|:\"*?]", "-", chapter_name)
+            # 第几章正则表达式去除掉，然后在开头加上章节数字：
+            chapter_name = re.sub("(第[\u4e00-\u9fa5\u767e\u5343\u96f6]{1,10}章)|(第[0-9]{1,10}章)", "", chapter_name)
+            chapter_name = str(index)+"_"+chapter_name
             file_name = save_path + "/"+chapter_name+".txt"
             file = open(file_name, 'w', encoding="utf-8")
             for index in range(len(content_list)):
