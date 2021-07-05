@@ -3,7 +3,7 @@ from source.www_gebiqu_com import Source
 import re
 
 # 图书链接文件
-bookUrl_path = "/home/bookUpdate/bookUrl.txt"
+bookUrl_path = "/home/clonebook_application/book_update/bookUrl.txt"
 # 来源字典创建
 source_web = {1: "http://www.gebiqu.com/", 2: "www.baidu.com"}
 
