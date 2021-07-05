@@ -4,7 +4,7 @@ import os
 import re
 import requests
 
-dir_path = "/home/book_save_dir"
+dir_path = "/home/clonebook_application/books_save"
 
 
 # 写入图书详情工具类
