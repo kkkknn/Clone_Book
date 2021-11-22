@@ -1,3 +1,4 @@
+# coding=UTF-8
 #!/usr/bin/python3
 from source.www_81zw_com import Source_81zw
 from source.www_gebiqu_com import Source_gebiqu

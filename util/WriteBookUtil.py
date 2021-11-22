@@ -1,8 +1,10 @@
+# coding=UTF-8
 #!/usr/bin/python3
 # 使用前首先要引入os模块，一个程序文件引入一次就可以了，下面默认都已引入os模块
 import os
 import re
 import requests
+
 
 dir_path = "/home/clonebook_application/books_save"
 

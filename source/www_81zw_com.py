@@ -1,3 +1,4 @@
+# coding=UTF-8
 #!/usr/bin/python3
 import requests
 from util.CloneUtil import CloneUtil
