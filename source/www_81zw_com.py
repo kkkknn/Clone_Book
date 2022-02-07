@@ -1,26 +1,47 @@
 # coding=UTF-8
 #!/usr/bin/python3
 import requests
-from util.CloneUtil import CloneUtil
-from util.WriteBookUtil import WriteUtil
+import json
 from lxml import etree
+from util.CloneUtil import CloneUtil
+from util.BookUtil import BookUtil
 
 source_url = "www.81zw.com"
 
 
 class Source_81zw(CloneUtil):
 
+    def search_book(self, json_str):
+        value = eval(json_str)
+        name = value['bookName']
+        author = value['authorName']
+        url = "https://www.81zw.com/search.php?q="+value['bookName']
+        try:
+            html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+        except requests.exceptions.RequestException as e:
+            print(e)
+            return
+        # 解析请求对比返回是否一致
+        req_authors = html.xpath('/html/body/div[3]/div/div[2]/div/p[1]/span[2]/text()')
+        req_urls = html.xpath('/html/body/div[3]/div/div[2]/h3/a/@href')
+
+        ret_url = None
+        for index in range(len(req_authors)):
+            if author == req_authors[index]:
+                ret_url = 'https://'+source_url+req_urls[index]
+                break
+        # 最终返回图书链接
+        return ret_url
+
     @staticmethod
     def clone_book(book_url):
-        img_url = None
-        book_name = None
-        author_name = None
         # 来源网址
         source_name = source_url
-        near_chapter_name = None
-
-        html = etree.HTML(requests.get(book_url).content)
-
+        try:
+            html = etree.HTML(requests.get(book_url, timeout=5).content.decode('utf-8'))
+        except requests.exceptions.RequestException as e:
+            print(e)
+            return
         # 写入图书名字
         content = html.xpath('//*[@id="info"]/h1/text()')
         book_name = content[0]
@@ -38,7 +59,7 @@ class Source_81zw(CloneUtil):
         content = html.xpath('//*[@id="intro"]/text()')
         book_about = content[0]
 
-        value = WriteUtil.write_info(img_url, book_name, source_name, author_name, near_chapter_name, book_about)
+        value = BookUtil.write_info(img_url, book_name, source_name, author_name, near_chapter_name, book_about)
         print(value)
 
         # 获取章节列表
@@ -53,16 +74,20 @@ class Source_81zw(CloneUtil):
 
         # 获取目录内最新章节
         root_path = source_url+"/"+book_name+"/chapters"
-        chapter_sum = WriteUtil.get_chapter_sum(root_path)
+        chapter_sum = BookUtil.get_chapter_sum(root_path)
         start_index = (chapter_sum-1) if chapter_sum > 0 else 0
         for index in range(len(chapter_list)):
             if index >= start_index:
                 # 获取章节内容 延迟卡在这里
                 url = "https://" + source_url + chapter_list[index][1]
-                chapter_html = etree.HTML(requests.get(url).content)
+                try:
+                    chapter_html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+                except requests.exceptions.RequestException as e:
+                    print(e)
+                    break
                 content_str_list = chapter_html.xpath('//div[@id="content"]/text()')
                 for content_str in content_str_list:
                     content_str.replace(u'\x20', u'\n').replace(u'\u3000', ' ')
-                str2 = WriteUtil.write_chapter(root_path, chapter_list[index][0],index, content_str_list)
+                str2 = BookUtil.write_chapter(root_path, chapter_list[index][0],index, content_str_list)
                 print(str2)
 

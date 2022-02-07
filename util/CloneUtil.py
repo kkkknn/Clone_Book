@@ -9,3 +9,7 @@ class CloneUtil(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def clone_book(self, book_url):
         raise AttributeError('子类必须实现get_book_info')
+
+    @abc.abstractmethod
+    def search_book(self, json_str):
+        raise AttributeError('子类必须实现搜索方式')
