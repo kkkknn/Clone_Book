@@ -38,6 +38,7 @@ class BookUtil(object):
             pic = requests.get(img_url)
         except requests.exceptions.ConnectionError:
             print('图片无法下载')
+            return '图片无法下载'
         # 保存图片路径
         fp = open(path + "/book_info.jpg", 'wb')
         fp.write(pic.content)

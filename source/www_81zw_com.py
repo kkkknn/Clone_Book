@@ -1,15 +1,22 @@
 # coding=UTF-8
 #!/usr/bin/python3
 import requests
-import json
 from lxml import etree
+from requests.adapters import HTTPAdapter
+
 from util.CloneUtil import CloneUtil
 from util.BookUtil import BookUtil
 
 source_url = "www.81zw.com"
+s = requests.Session()
+s.mount('http://', HTTPAdapter(max_retries=3))
+s.mount('https://', HTTPAdapter(max_retries=3))
+connectTimeOut = 5
+readTimeOut = 10
 
 
 class Source_81zw(CloneUtil):
+
 
     def search_book(self, json_str):
         value = eval(json_str)
@@ -17,7 +24,7 @@ class Source_81zw(CloneUtil):
         author = value['authorName']
         url = "https://www.81zw.com/search.php?q="+value['bookName']
         try:
-            html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+            html = etree.HTML(s.get(url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
         except requests.exceptions.RequestException as e:
             print(e)
             return
@@ -38,7 +45,7 @@ class Source_81zw(CloneUtil):
         # 来源网址
         source_name = source_url
         try:
-            html = etree.HTML(requests.get(book_url, timeout=5).content.decode('utf-8'))
+            html = etree.HTML(s.get(book_url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
         except requests.exceptions.RequestException as e:
             print(e)
             return
@@ -81,7 +88,7 @@ class Source_81zw(CloneUtil):
                 # 获取章节内容 延迟卡在这里
                 url = "https://" + source_url + chapter_list[index][1]
                 try:
-                    chapter_html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+                    chapter_html = etree.HTML(s.get(url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
                 except requests.exceptions.RequestException as e:
                     print(e)
                     break

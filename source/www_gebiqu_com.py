@@ -3,11 +3,18 @@
 import re
 
 import requests
+from requests.adapters import HTTPAdapter
+
 from util.CloneUtil import CloneUtil
 from util.BookUtil import BookUtil
 from lxml import etree
 
 source_url = "www.gebiqu.com"
+s = requests.Session()
+s.mount('http://', HTTPAdapter(max_retries=3))
+s.mount('https://', HTTPAdapter(max_retries=3))
+connectTimeOut = 5
+readTimeOut = 10
 
 
 class Source_gebiqu(CloneUtil):
@@ -18,7 +25,7 @@ class Source_gebiqu(CloneUtil):
         author = value['authorName']
         url = "https://www.gebiqu.com/modules/article/search.php?searchkey=" + value['bookName']
         try:
-            html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+            html = etree.HTML(s.get(url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
         except requests.exceptions.RequestException as e:
             print(e)
             return
@@ -43,7 +50,7 @@ class Source_gebiqu(CloneUtil):
         source_name = source_url
         near_chapter_name = None
         try:
-            html = etree.HTML(requests.get(book_url, timeout=5).content.decode('utf-8'))
+            html = etree.HTML(s.get(book_url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
         except requests.exceptions.RequestException as e:
             print(e)
             return
@@ -86,7 +93,7 @@ class Source_gebiqu(CloneUtil):
                 # 获取章节内容 延迟卡在这里
                 url = "http://" + source_url + chapter_list[index][1]
                 try:
-                    chapter_html = etree.HTML(requests.get(url, timeout=5).content.decode('utf-8'))
+                    chapter_html = etree.HTML(s.get(url, timeout=(connectTimeOut,readTimeOut)).content.decode('utf-8'))
                 except requests.exceptions.RequestException as e:
                     print(e)
                     break
