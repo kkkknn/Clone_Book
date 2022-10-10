@@ -8,7 +8,7 @@ from lxml import etree
 import json
 
 
-dir_path = "/home/clonebook_application/books_save"
+dir_path = "/home/ubuntu/clone_project/clone_source/books_save"
 
 
 # 图书工具类

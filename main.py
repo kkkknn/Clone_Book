@@ -10,8 +10,7 @@ from util.BookUtil import BookUtil
 source_web = {1: "http://www.gebiqu.com/",
               2: "https://www.81zw.com/"}
 # 图书链接文件
-bookUrl_path = "/home/clonebook_application/book_update/bookUrl.txt"
-
+bookUrl_path = "/home/ubuntu/clone_project/clone_source/book_update/bookUrl.txt"
 
 def downloadBook(book_url):
     source = None
